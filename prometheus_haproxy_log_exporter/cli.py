@@ -111,12 +111,7 @@ def get_argument_parser():
         '--enabled-metrics',
         nargs='+',
         default=(
-            [
-                'requests_total',
-                'bytes_read_total',
-                'backend_queue_length',
-                'server_queue_length',
-            ] +
+            [] +
             list(metrics.TIMERS.keys())
         ),
         choices=(
@@ -151,7 +146,7 @@ def get_argument_parser():
         p.add_argument(
             '--%s-labels' % timer_name.replace('_', '-'),
             nargs='+',
-            default=[],
+            default=["status_code", "backend_name", "server_name"],
             choices=metrics.REQUEST_LABELS,
             help="Labels for the %s timer" % timer_name,
             env_var='%s_LABELS' % timer_name.upper(),
