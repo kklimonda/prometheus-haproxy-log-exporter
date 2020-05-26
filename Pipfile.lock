@@ -1,0 +1,59 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "7c901a1d8f50f5d613d4b97a6faa9bdcea937df8699a07e830d1322109f503f0"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.6"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "haproxy-log-analysis": {
+            "hashes": [
+                "sha256:27af5096adfac063b7022a5501bed7a7c85602609ef127e3fe692296e39b79cf",
+                "sha256:407a7ecd3b035b56711812cf83b7a2bf5a2b369440b2ab15b37c95384753c6ce"
+            ],
+            "index": "pypi",
+            "version": "==4.1.0"
+        }
+    },
+    "develop": {
+        "altgraph": {
+            "hashes": [
+                "sha256:1f05a47122542f97028caf78775a095fbe6a2699b5089de8477eb583167d69aa",
+                "sha256:c623e5f3408ca61d4016f23a681b9adb100802ca3e3da5e718915a9e4052cebe"
+            ],
+            "version": "==0.17"
+        },
+        "macholib": {
+            "hashes": [
+                "sha256:0c436bc847e7b1d9bda0560351bf76d7caf930fb585a828d13608839ef42c432",
+                "sha256:c500f02867515e6c60a27875b408920d18332ddf96b4035ef03beddd782d4281"
+            ],
+            "version": "==1.14"
+        },
+        "pyinstaller": {
+            "hashes": [
+                "sha256:3730fa80d088f8bb7084d32480eb87cbb4ddb64123363763cf8f2a1378c1c4b7"
+            ],
+            "index": "pypi",
+            "version": "==3.6"
+        },
+        "pyinstaller-setuptools": {
+            "hashes": [
+                "sha256:45332453b24b957de88766726104b3dc7dea5d6a6ef56e9bc1a25f53450727d1",
+                "sha256:8028e9214cf53f99dd7eaa647da751f92e0446b45900987bc1c58f58e371c047"
+            ],
+            "index": "pypi",
+            "version": "==2019.3"
+        }
+    }
+}

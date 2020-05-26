@@ -2,7 +2,8 @@
 
 import os
 
-from setuptools import setup, find_packages
+from pyinstaller_setuptools import setup
+from setuptools import find_packages
 
 # When making a debian package from this package, inline requirements just confuses the debian
 # tools, so simply leave them out if the DH_INTERNAL_BUILDFLAGS env-variable is set.
