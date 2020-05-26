@@ -13,9 +13,7 @@ else:
         "install_requires":[
              'configargparse',
              'prometheus-client',
-             #'systemd', ??? Unknown which module this is
-             'haproxy-log-analysis<2.0',
-             #'pkg-resources', ??? Unknown which module this is
+             'haproxy-log-analysis>4.1',
              'tailhead'
         ],
         "setup_requires":['pytest-runner'],

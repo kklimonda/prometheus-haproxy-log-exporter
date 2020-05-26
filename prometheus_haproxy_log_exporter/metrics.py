@@ -20,7 +20,7 @@ NAMESPACE = 'haproxy_log'
 TIMERS = {
     'request_wait_milliseconds': (
         'time_wait_request',
-        "Time spent waiting for the client to send the full HTTP request (Tq in HAProxy)",
+        "Time spent waiting for the client to send the full HTTP request (TR in HAProxy)",
     ),
     'server_tcp_connection_establish_milliseconds': (
         'time_connect_server',
@@ -103,7 +103,7 @@ def requests_total(labelnames):
             requests_total.inc()
     else:
         def observe(line):
-            requests_total.labels({
+            requests_total.labels(**{
                 label: getattr(line, label)
                 for label in labelnames
             }).inc()
@@ -117,7 +117,7 @@ def timer(timer_name, labelnames, buckets):
     all_labelnames = labelnames
 
     if timer_name == 'session_duration_milliseconds':
-        all_labelnames = labelnames + ['logasap']
+        all_labelnames = labelnames
 
     histogram = Histogram(
         timer_name,
@@ -130,6 +130,10 @@ def timer(timer_name, labelnames, buckets):
     if timer_name == 'session_duration_milliseconds':
         def observe(line):
             raw_value = getattr(line, attribute)
+            # not all attributes are set for both HTTP and TCP logs,
+            # so bail out early if value is None
+            if raw_value is None:
+                return
 
             label_values = {
                 label: getattr(line, label)
@@ -137,13 +141,11 @@ def timer(timer_name, labelnames, buckets):
             }
 
             if raw_value.startswith('+'):
-                label_values['logasap'] = True
                 value = float(raw_value[1:])
             else:
-                label_values['logasap'] = False
                 value = float(raw_value)
 
-            histogram.labels(label_values).observe(value)
+            histogram.labels(**label_values).observe(value)
     else:
         abort_counter_name, abort_counter_documentation = TIMER_ABORT_COUNTERS[timer_name]
 
@@ -164,7 +166,12 @@ def timer(timer_name, labelnames, buckets):
                     histogram.observe(value)
         else:
             def observe(line):
-                value = float(getattr(line, attribute))
+                value = getattr(line, attribute)
+                # Not all attributes are set for both TCP and HTTP
+                # so bail out early if value is None
+                if value is None:
+                    return
+                value = float(value)
 
                 label_values = {
                     label: getattr(line, label)
@@ -172,9 +179,9 @@ def timer(timer_name, labelnames, buckets):
                 }
 
                 if value == -1:
-                    abort_counter.labels(label_values).inc()
+                    abort_counter.labels(**label_values).inc()
                 else:
-                    histogram.labels(label_values).observe(value)
+                    histogram.labels(**label_values).observe(value)
 
     return observe
 
@@ -192,7 +199,7 @@ def bytes_read_total(labelnames):
             counter.inc()
     else:
         def observe(line):
-            counter.labels({
+            counter.labels(**{
                 label: getattr(line, label)
                 for label in labelnames
             }).inc()
