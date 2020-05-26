@@ -140,7 +140,7 @@ def timer(timer_name, labelnames, buckets):
                 for label in labelnames
             }
 
-            if raw_value.startswith('+'):
+            if isinstance(raw_value, str) and raw_value.startswith('+'):
                 value = float(raw_value[1:])
             else:
                 value = float(raw_value)
