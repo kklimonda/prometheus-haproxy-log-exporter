@@ -94,6 +94,11 @@ def get_argument_parser():
         env_var='JOURNAL_UNIT',
     )
     processor.add_argument(
+        "--fluentd",
+        help="read logs from rotated fluentd-formatted file",
+        dest="fluentd",
+    )
+    processor.add_argument(
         '-s',
         '--stdin',
         help="read logs from stdin",
@@ -241,6 +246,13 @@ def create_log_processor(options, error):
             metric_updaters=metric_updaters,
             path=options.file,
         )
+    elif options.fluentd:
+        from .fluentd_rotated import LogFluentdProcessor
+
+        log_processor = LogFluentdProcessor(
+            metric_updaters=metric_updaters,
+            path=options.fluentd,
+        )
 
     return log_processor
 
@@ -270,3 +282,7 @@ def main():
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
+
+
+if __name__ == "__main__":
+    main()
