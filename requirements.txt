@@ -1,3 +1,1 @@
---index-url https://pypi.python.org/simple/
-
--e .
+-e git+https://github.com/kklimonda/haproxy_log_analysis#egg=haproxy_log_analysis
