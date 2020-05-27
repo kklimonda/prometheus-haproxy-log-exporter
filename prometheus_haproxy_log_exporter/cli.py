@@ -242,7 +242,7 @@ def create_log_processor(options, error):
             path=options.file,
         )
     elif options.fluentd:
-        from .fluentd_rotated import LogFluentdProcessor
+        from .fluentd import LogFluentdProcessor
 
         log_processor = LogFluentdProcessor(
             metric_updaters=metric_updaters,
