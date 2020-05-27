@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7c901a1d8f50f5d613d4b97a6faa9bdcea937df8699a07e830d1322109f503f0"
+            "sha256": "3e18a10453807b9a259b97411cd4ed5d87dec234cd9bb3b0c593501bb5967c5a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,13 +16,32 @@
         ]
     },
     "default": {
-        "haproxy-log-analysis": {
+        "configargparse": {
             "hashes": [
-                "sha256:27af5096adfac063b7022a5501bed7a7c85602609ef127e3fe692296e39b79cf",
-                "sha256:407a7ecd3b035b56711812cf83b7a2bf5a2b369440b2ab15b37c95384753c6ce"
+                "sha256:edd17be986d5c1ba2e307150b8e5f5107aba125f3574dddd02c85d5cdcfd37dc"
             ],
             "index": "pypi",
-            "version": "==4.1.0"
+            "version": "==1.2.3"
+        },
+        "haproxy-log-analysis": {
+            "editable": true,
+            "git": "https://github.com/kklimonda/haproxy_log_analysis",
+            "ref": "4d593931addc482cf73a244978e82a17878dc8a9"
+        },
+        "prometheus-client": {
+            "hashes": [
+                "sha256:983c7ac4b47478720db338f1491ef67a100b474e3bc7dafcbaefb7d0b8f9b01c",
+                "sha256:c6e6b706833a6bd1fd51711299edee907857be10ece535126a158f911ee80915"
+            ],
+            "index": "pypi",
+            "version": "==0.8.0"
+        },
+        "tailhead": {
+            "hashes": [
+                "sha256:916f70583494f38009410f178c3aea3f3b5e3f3b9c2d83f643547b2651147a03"
+            ],
+            "index": "pypi",
+            "version": "==1.0.2"
         }
     },
     "develop": {
@@ -38,6 +57,8 @@
                 "sha256:0c436bc847e7b1d9bda0560351bf76d7caf930fb585a828d13608839ef42c432",
                 "sha256:c500f02867515e6c60a27875b408920d18332ddf96b4035ef03beddd782d4281"
             ],
+            "index": "pypi",
+            "markers": "sys_platform == 'darwin'",
             "version": "==1.14"
         },
         "pyinstaller": {

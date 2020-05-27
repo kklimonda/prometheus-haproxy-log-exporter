@@ -6,9 +6,13 @@ verify_ssl = true
 [dev-packages]
 pyinstaller = "*"
 pyinstaller-setuptools = "*"
+macholib = { version = "*", sys_platform = "== 'darwin'" }
 
 [packages]
-haproxy-log-analysis = "*"
+haproxy-log-analysis = {git = "https://github.com/kklimonda/haproxy_log_analysis", editable = true, ref = "master"}
+configargparse = "*"
+prometheus_client = "*"
+tailhead = "*"
 
 [requires]
 python_version = "3.6"
