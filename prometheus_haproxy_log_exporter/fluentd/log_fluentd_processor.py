@@ -12,5 +12,9 @@ class LogFluentdProcessor(LogFileProcessor):
                 if self.should_exit:
                     return
                 continue
-            payload = json.loads(line)['Payload']
+            try:
+                payload = json.loads(line)['Payload']
+            except json.decoder.JSONDecodeError:
+                print("Line not parsable as JSON: {}".format(line))
+                continue
             self.update_metrics(payload)
