@@ -62,17 +62,19 @@ TIMER_ABORT_COUNTERS = {
 TIMER_NAMES = TIMERS.keys()
 
 # These are attributes associated with each line processed, which can be used
-# as labels on metrics
-REQUEST_LABELS = (
-    'status_code',
-    'frontend_name',
-    'backend_name',
-    'server_name',
-    'http_request_path',
-    'http_request_method',
-    'client_ip',
-    'client_port',
-)
+# as labels on metrics. Labels (matching official haproxy exporter where
+# applicable) are converted to attributes from haproxy.line.Line.
+REQUEST_LABELS = [
+    # (label, attribute)
+    ('code', 'status_code'),
+    ('frontend', 'frontend_name'),
+    ('backend', 'backend_name'),
+    ('server', 'server_name'),
+    ('http_request_path', 'http_request_path'),
+    ('http_request_method', 'http_request_method'),
+    ('client_ip', 'client_ip'),
+    ('client_port', 'client_port'),
+]
 
 # These are the default buckets for the Prometheus python client, adjusted to
 # be in milliseconds
@@ -114,16 +116,16 @@ def requests_total(labelnames):
 def timer(timer_name, labelnames, buckets):
     attribute, documentation = TIMERS[timer_name]
 
-    all_labelnames = labelnames
+    labelnames
 
-    if timer_name == 'session_duration_seconds':
-        all_labelnames = labelnames
+    label_mappings = [mapping for mapping
+                      in REQUEST_LABELS if mapping[0] in labelnames]
 
     histogram = Histogram(
         timer_name,
         documentation=documentation,
         namespace=NAMESPACE,
-        labelnames=tuple(all_labelnames),
+        labelnames=tuple(labelnames),
         buckets=buckets,
     )
 
@@ -131,13 +133,13 @@ def timer(timer_name, labelnames, buckets):
         def observe(line):
             raw_value = getattr(line, attribute)
             # not all attributes are set for both HTTP and TCP logs,
-            # so bail out early if value is None
+            # so ba il out early if value is None
             if raw_value is None:
                 return
 
             label_values = {
-                label: getattr(line, label)
-                for label in labelnames
+                label: getattr(line, attr)
+                for (label, attr) in label_mappings
             }
 
             # strip prefix + if present, and convert from milliseconds to seconds
@@ -175,8 +177,8 @@ def timer(timer_name, labelnames, buckets):
                 value = float(value)
 
                 label_values = {
-                    label: getattr(line, label)
-                    for label in labelnames
+                    label: getattr(line, attr)
+                    for label, attr in label_mappings
                 }
 
                 if value == -1:
@@ -195,14 +197,17 @@ def bytes_read_total(labelnames):
         labelnames=labelnames,
     )
 
+    label_mappings = [mapping for mapping
+                      in REQUEST_LABELS if mapping[0] in labelnames]
+
     if len(labelnames) == 0:
         def observe(line):
             counter.inc()
     else:
         def observe(line):
             counter.labels(**{
-                label: getattr(line, label)
-                for label in labelnames
+                label: getattr(line, attr)
+                for label, attr in label_mappings
             }).inc()
 
     return observe
@@ -217,14 +222,17 @@ def backend_queue_length(labelnames, buckets):
         buckets=buckets,
     )
 
+    label_mappings = [mapping for mapping
+                      in REQUEST_LABELS if mapping[0] in labelnames]
+
     if len(labelnames) == 0:
         def observe(line):
             histogram.observe(line.queue_backend)
     else:
         def observe(line):
             histogram.labels({
-                label: getattr(line, label)
-                for label in labelnames
+                label: getattr(line, attr)
+                for label, attr in label_mappings
             }).observe(line.queue_backend)
 
     return observe
@@ -239,14 +247,17 @@ def server_queue_length(labelnames, buckets):
         buckets=buckets,
     )
 
+    label_mappings = [mapping for mapping
+                      in REQUEST_LABELS if mapping[0] in labelnames]
+
     if len(labelnames) == 0:
         def observe(line):
             histogram.observe(line.queue_server)
     else:
         def observe(line):
             histogram.labels({
-                label: getattr(line, label)
-                for label in labelnames
+                label: getattr(line, attr)
+                for label, attr in label_mappings
             }).observe(line.queue_server)
 
     return observe

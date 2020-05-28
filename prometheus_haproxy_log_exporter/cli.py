@@ -136,8 +136,8 @@ def get_argument_parser():
         p.add(
             '--%s-labels' % name_with_hyphens,
             nargs='+',
-            default=['status_code', 'backend_name', 'server_name'],
-            choices=metrics.REQUEST_LABELS,
+            default=['code', 'backend', 'server'],
+            choices=[label for label, _ in metrics.REQUEST_LABELS],
             help="Labels to use for %s" % counter.__name__,
             env_var='%s_LABELS' % counter.__name__.upper(),
         )
@@ -146,8 +146,8 @@ def get_argument_parser():
         p.add_argument(
             '--%s-labels' % timer_name.replace('_', '-'),
             nargs='+',
-            default=["status_code", "backend_name", "server_name"],
-            choices=metrics.REQUEST_LABELS,
+            default=["code", "backend", "server"],
+            choices=[label for label, _ in metrics.REQUEST_LABELS],
             help="Labels for the %s timer" % timer_name,
             env_var='%s_LABELS' % timer_name.upper(),
         )
@@ -170,7 +170,7 @@ def get_argument_parser():
             '--%s-labels' % name_with_hyphens,
             nargs='+',
             default=[],
-            choices=metrics.REQUEST_LABELS,
+            choices=[label for label, _ in metrics.REQUEST_LABELS],
             help="Labels for the %s metric" % queue_histogram.__name__,
             env_var='%s_LABELS' % queue_histogram.__name__.upper(),
         )
