@@ -18,42 +18,42 @@ from prometheus_client import Counter, Histogram
 NAMESPACE = 'haproxy_log'
 
 TIMERS = {
-    'request_wait_milliseconds': (
+    'request_wait_seconds': (
         'time_wait_request',
         "Time spent waiting for the client to send the full HTTP request (TR in HAProxy)",
     ),
-    'server_tcp_connection_establish_milliseconds': (
+    'server_tcp_connection_establish_seconds': (
         'time_connect_server',
-        "Time in milliseconds to connect to the final server (Tc in HAProxy)",
+        "Time in seconds to connect to the final server (Tc in HAProxy)",
     ),
-    'request_queued_milliseconds': (
+    'request_queued_seconds': (
         'time_wait_queues',
         "Time that the request spend on HAProxy queues (Tw in HAProxy)",
     ),
-    'response_processing_milliseconds': (
+    'response_processing_seconds': (
         'time_wait_response',
         "Time waiting the downstream server to send the full HTTP response (Tr in HAProxy)",
     ),
-    'session_duration_milliseconds': (
+    'session_duration_seconds': (
         'total_time',
         "Time between accepting the HTTP request and sending back the HTTP response (Tt in HAProxy)",
     ),
 }
 
 TIMER_ABORT_COUNTERS = {
-    'request_wait_milliseconds': (  # Tq
+    'request_wait_seconds': (  # Tq
         'request_abort_total',
         "Count of connections aborted before a complete request was received",
     ),
-    'server_tcp_connection_establish_milliseconds': (  # Tc
+    'server_tcp_connection_establish_seconds': (  # Tc
         'request_pre_server_connection_abort',
         "Count of connections aborted before a connection to a server was established",
     ),
-    'request_queued_milliseconds': (  # Tw
+    'request_queued_seconds': (  # Tw
         'request_pre_queue_abort_total',
         "Count of connections aborted before reaching the queue",
     ),
-    'response_processing_milliseconds': (  # Tr
+    'response_processing_seconds': (  # Tr
         'request_response_abort_total',
         "Count of connections for which the last response header from the server was never received",
     ),
@@ -77,10 +77,10 @@ REQUEST_LABELS = (
 # These are the default buckets for the Prometheus python client, adjusted to
 # be in milliseconds
 DEFAULT_TIMER_BUCKETS = (
-    5, 10, 25,
-    50, 75, 100, 250,
-    500, 750, 1000, 2500,
-    5000, 7500, 10000, float('inf'),
+    0.005, 0.010, 0.025,
+    0.050, 0.075, 0.100, 0.250,
+    0.500, 0.750, 1.0, 2.5,
+    5.0, 7.5, 10.0, float('inf'),
 )
 
 
@@ -116,7 +116,7 @@ def timer(timer_name, labelnames, buckets):
 
     all_labelnames = labelnames
 
-    if timer_name == 'session_duration_milliseconds':
+    if timer_name == 'session_duration_seconds':
         all_labelnames = labelnames
 
     histogram = Histogram(
@@ -127,7 +127,7 @@ def timer(timer_name, labelnames, buckets):
         buckets=buckets,
     )
 
-    if timer_name == 'session_duration_milliseconds':
+    if timer_name == 'session_duration_seconds':
         def observe(line):
             raw_value = getattr(line, attribute)
             # not all attributes are set for both HTTP and TCP logs,
@@ -140,10 +140,11 @@ def timer(timer_name, labelnames, buckets):
                 for label in labelnames
             }
 
+            # strip prefix + if present, and convert from milliseconds to seconds
             if isinstance(raw_value, str) and raw_value.startswith('+'):
-                value = float(raw_value[1:])
+                value = float(raw_value[1:]) / 1000
             else:
-                value = float(raw_value)
+                value = float(raw_value) / 1000
 
             histogram.labels(**label_values).observe(value)
     else:
@@ -181,7 +182,7 @@ def timer(timer_name, labelnames, buckets):
                 if value == -1:
                     abort_counter.labels(**label_values).inc()
                 else:
-                    histogram.labels(**label_values).observe(value)
+                    histogram.labels(**label_values).observe(value / 1000)
 
     return observe
 
