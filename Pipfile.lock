@@ -26,7 +26,7 @@
         "haproxy-log-analysis": {
             "editable": true,
             "git": "https://github.com/kklimonda/haproxy_log_analysis",
-            "ref": "5d74b56d415569738aa421269edbeee8becd8f39"
+            "ref": "52b8367b308893482a298b4df5c0426e2a829be3"
         },
         "prometheus-client": {
             "hashes": [
