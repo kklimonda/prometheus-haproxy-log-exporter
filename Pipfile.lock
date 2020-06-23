@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3e18a10453807b9a259b97411cd4ed5d87dec234cd9bb3b0c593501bb5967c5a"
+            "sha256": "9871f3d439f200f90df5350d51960035f2410bd23cb85acc73d9abc5f3e21876"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -26,7 +26,7 @@
         "haproxy-log-analysis": {
             "editable": true,
             "git": "https://github.com/kklimonda/haproxy_log_analysis",
-            "ref": "52b8367b308893482a298b4df5c0426e2a829be3"
+            "ref": "75ecacdf46c3ef0026d9fe932f099e2ab08589d1"
         },
         "prometheus-client": {
             "hashes": [

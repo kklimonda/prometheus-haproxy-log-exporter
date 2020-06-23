@@ -9,7 +9,7 @@ pyinstaller-setuptools = "*"
 macholib = { version = "*", sys_platform = "== 'darwin'" }
 
 [packages]
-haproxy-log-analysis = {git = "https://github.com/kklimonda/haproxy_log_analysis", editable = true, ref = "master"}
+haproxy-log-analysis = {git = "https://github.com/kklimonda/haproxy_log_analysis", editable = true, ref = "75ecacd"}
 configargparse = "*"
 prometheus_client = "*"
 tailhead = "*"
