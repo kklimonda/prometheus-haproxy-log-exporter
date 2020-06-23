@@ -112,8 +112,6 @@ def requests_total(labelnames):
 def timer(timer_name, labelnames, buckets):
     attribute, documentation = TIMERS[timer_name]
 
-    labelnames
-
     label_mappings = [mapping for mapping
                       in REQUEST_LABELS if mapping[0] in labelnames]
 
