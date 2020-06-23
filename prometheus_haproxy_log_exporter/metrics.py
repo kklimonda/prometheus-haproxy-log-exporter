@@ -76,20 +76,16 @@ REQUEST_LABELS = [
     ('client_port', 'client_port'),
 ]
 
-# These are the default buckets for the Prometheus python client, adjusted to
-# be in milliseconds
 DEFAULT_TIMER_BUCKETS = (
-    0.005, 0.010, 0.025,
-    0.050, 0.075, 0.100, 0.250,
-    0.500, 0.750, 1.0, 2.5,
-    5.0, 7.5, 10.0, float('inf'),
+    0.05, 0.1, 0.25, 0.5,
+    1.0, 3.0, 6.0, 10.0, float('inf'),
 )
 
 
-DEFAULT_QUEUE_LENGTH_BUCKETS = tuple(itertools.chain(
-    range(0, 10),
-    (20, 30, 40, 60, 100, float('inf')),
-))
+DEFAULT_QUEUE_LENGTH_BUCKETS = (
+    0.0, 1.0, 3.0, 5.0, 8.0, 15.0,
+    25.0, 50.0, float('inf')
+)
 
 
 def requests_total(labelnames):
